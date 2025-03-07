@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .neubrutalism {
+            border: 3px solid black;
+            box-shadow: 5px 5px 0px 0px rgba(0,0,0,1);
+            transition: all 0.2s ease;
+        }
+        .neubrutalism:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px 0px rgba(0,0,0,1);
+        }
+        .tab-active {
+            background-color: #FFD23F;
+            color: black;
+        }
+        .post-card {
+            background-color: white;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="bg-[#EEF0F2]">
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 neubrutalism max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6">Login to CampusConnect</h2>
+            <div class="space-y-4">
+                <input type="email" placeholder="College Email (@edu)" class="w-full p-3 neubrutalism">
+                <input type="password" placeholder="Password" class="w-full p-3 neubrutalism">
+                <button onclick="login()" class="w-full bg-[#FFD23F] p-3 font-bold neubrutalism">
+                    Verify & Login
+                </button>
+                <p class="text-sm text-center">Only verified college students can join</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <!-- Navigation -->
+        <nav class="bg-white p-4 neubrutalism mb-6">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">CampusConnect</h1>
+                <div class="flex items-center gap-4">
+                    <button class="neubrutalism px-4 py-2" onclick="showNotifications()">
+                        <i class="bi bi-bell"></i>
+                    </button>
+                    <button class="neubrutalism px-4 py-2" onclick="toggleProfile()">
+                        <i class="bi bi-person"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-4xl mx-auto px-4">
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-6 overflow-x-auto">
+                <button class="neubrutalism px-6 py-2 tab-active" onclick="switchTab(this, 'feed')">Feed</button>
+                <button class="neubrutalism px-6 py-2" onclick="switchTab(this, 'marketplace')">Marketplace</button>
+                <button class="neubrutalism px-6 py-2" onclick="switchTab(this, 'messages')">Messages</button>
+            </div>
+
+            <!-- Create Post -->
+            <div class="neubrutalism p-4 bg-white mb-6">
+                <textarea placeholder="Share something anonymously..." class="w-full p-3 neubrutalism mb-4"></textarea>
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-2">
+                        <button class="neubrutalism p-2">
+                            <i class="bi bi-image"></i>
+                        </button>
+                        <button class="neubrutalism p-2">
+                            <i class="bi bi-gif"></i>
+                        </button>
+                    </div>
+                    <button class="bg-[#FFD23F] px-6 py-2 font-bold neubrutalism">Post</button>
+                </div>
+            </div>
+
+            <!-- Feed -->
+            <div id="feed">
+                <!-- Sample Posts -->
+                <div class="neubrutalism bg-white p-4 mb-4">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold">Anonymous Tiger</span>
+                        <span class="text-gray-500">2m ago</span>
+                    </div>
+                    <p class="mb-4">Anyone else struggling with Professor Smith's midterm? 😩</p>
+                    <div class="flex gap-4">
+                        <button class="neubrutalism px-4 py-2 flex items-center gap-2">
+                            <i class="bi bi-heart"></i> 24
+                        </button>
+                        <button class="neubrutalism px-4 py-2 flex items-center gap-2">
+                            <i class="bi bi-chat"></i> 8
+                        </button>
+                    </div>
+                </div>
+
+                <div class="neubrutalism bg-white p-4 mb-4">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold">Anonymous Eagle</span>
+                        <span class="text-gray-500">15m ago</span>
+                    </div>
+                    <p class="mb-4">Found a great study spot in the library's west wing! Super quiet and has power outlets everywhere!</p>
+                    <div class="flex gap-4">
+                        <button class="neubrutalism px-4 py-2 flex items-center gap-2">
+                            <i class="bi bi-heart"></i> 45
+                        </button>
+                        <button class="neubrutalism px-4 py-2 flex items-center gap-2">
+                            <i class="bi bi-chat"></i> 12
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marketplace -->
+            <div id="marketplace" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="neubrutalism bg-white p-4">
+                    <img src="https://images.unsplash.com/photo-1550399105-c4db5fb85c18" class="w-full h-48 object-cover mb-4 neubrutalism">
+                    <h3 class="font-bold">Calculus Textbook</h3>
+                    <p class="text-gray-600">Like new, used for one semester</p>
+                    <p class="font-bold mt-2">$45</p>
+                    <button class="w-full bg-[#FFD23F] mt-4 py-2 neubrutalism">Contact Seller</button>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div id="messages" class="hidden">
+                <div class="neubrutalism bg-white p-4 mb-4">
+                    <h3 class="font-bold mb-4">Recent Messages</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-2 hover:bg-gray-100 cursor-pointer">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full"></div>
+                            <div>
+                                <p class="font-bold">Study Group Chat</p>
+                                <p class="text-gray-600">Meeting at 6PM today?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function login() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+        }
+
+        function switchTab(el, tab) {
+            // Remove active class from all tabs
+            document.querySelectorAll('button').forEach(btn => btn.classList.remove('tab-active'));
+            el.classList.add('tab-active');
+
+            // Hide all content
+            document.getElementById('feed').classList.add('hidden');
+            document.getElementById('marketplace').classList.add('hidden');
+            document.getElementById('messages').classList.add('hidden');
+
+            // Show selected content
+            document.getElementById(tab).classList.remove('hidden');
+        }
+
+        function showNotifications() {
+            alert('No new notifications');
+        }
+
+        function toggleProfile() {
+            alert('Profile feature coming soon!');
+        }
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
